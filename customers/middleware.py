@@ -26,14 +26,23 @@ class faces:
 
     def process_view(self,request,view_func,view_args,view_kwargs):
         print("cccccccc")
-        if request.method == 'GET':
-            print(request)
-        elif request.method == 'POST':
-            #/admin/customers/customer/add/
-            print(request.content_type)
-            print(request.content_params)
-            print(request.GET)
-            print(request)
+        if request.user.is_authenticated:
+            r = Customer.objects.get(id_customer=5)
+            print(r)
+            if request.method == 'GET':
+                print(request.content_type)
+                print(request.content_params)
+                print(request.GET)
+                print(request)
+            elif request.method == 'POST':
+                #/admin/customers/customer/add/
+                #/admin/customers/customer/5/change/
+                print(request.content_type)
+                print(request.content_params)
+                print(request.GET)
+                print(request)
+        else:
+            pass
         return None
 
     def process_response(self, request, response):

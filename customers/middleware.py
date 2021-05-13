@@ -1,5 +1,6 @@
 from . models import Customer
 from django.http import HttpResponse
+import requests
 
 #http://127.0.0.1:8000/admin/customers/customer/add/ adding new one and getting id data from server
 #http://127.0.0.1:8000/admin/customers/customer/ list
@@ -24,21 +25,23 @@ class faces:
 
     def process_view(self,request,view_func,view_args,view_kwargs):
         if request.user.is_authenticated:
-
-            e = view_kwargs.get('object_id')
-            if e:
-                customer_name = Customer.objects.get(id_customer=e)
-                print(customer_name)
             print("user {}" .format(e))
             print("view_args {}" .format(view_args))
             print("view_kwargs {}" .format(view_kwargs))
             if request.method == 'GET':
+                ######
+                # change existing user true
+                # /admin/customers/customer/5/change/
+                e = view_kwargs.get('object_id')
+                if e:
+                    customer_name = Customer.objects.get(id_customer=e)
+                    print(customer_name)
+                    print(self.call_to_biostar2(e))
                 print("request.content_params {}" .format(request.content_params))
                 print(request.GET)
                 print(request)
             elif request.method == 'POST':
-                #/admin/customers/customer/add/
-                #/admin/customers/customer/5/change/
+                # /admin/customers/customer/add/
                 print(request.content_params)
                 print(request.GET)
                 print(request)
@@ -52,3 +55,8 @@ class faces:
             print(request.Customer)
             request.Customer.save()
         return response
+
+    def call_to_biostar2(self,id_user):
+        url="http://127.0.0.1:8000/?id_user={}".format(id_user)
+        newuser = requests.get(url)
+        return """[{ "access_groups": [ { "id": 0, "included_by_user_group": "string", "name": "string" } ], "card_count": 0, "email": "string", "expiry_datetime": "string", "face_template_count": 0, "fingerprint_template_count": 0, "last_modify": 0, "login_id": "string", "name": "string", "password_exist": true, "permission": { "id": 0, "name": "string", "permissions": [ { "allowed_group_id_list": [ "long" ], "module": "string", "read": true, "write": true } ] }, "phone_number": "string", "photo": "string", "pin_exist": true, "security_level": "string", "start_datetime": "string", "status": "string", "user_group": { "id": 0, "name": "string" }, "user_id": "string" }]"""

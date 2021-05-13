@@ -25,7 +25,6 @@ class faces:
 
     def process_view(self,request,view_func,view_args,view_kwargs):
         if request.user.is_authenticated:
-            print("user {}" .format(e))
             print("view_args {}" .format(view_args))
             print("view_kwargs {}" .format(view_kwargs))
             if request.method == 'GET':
@@ -34,6 +33,7 @@ class faces:
                 # /admin/customers/customer/5/change/
                 e = view_kwargs.get('object_id')
                 if e:
+                    print("user {}" .format(e))
                     customer_name = Customer.objects.get(id_customer=e)
                     print(customer_name)
                     print(self.call_to_biostar2(e))
@@ -43,7 +43,7 @@ class faces:
             elif request.method == 'POST':
                 # /admin/customers/customer/add/
                 print(request.content_params)
-                print(request.GET)
+                print(request.POST)
                 print(request)
         else:
             pass

@@ -22,29 +22,31 @@ class faces:
         if request.user.is_authenticated:
             print("view_kwargs {}" .format(view_kwargs))
             if request.method == 'GET':
+
                 e = view_kwargs.get('object_id') #change existing user /admin/customers/customer/5/change/
                 if e:
                     print("user {}" .format(e))
                     customer_name = Customer.objects.get(id_customer=e)
                     print("new name {}".format(customer_name))
-                    payload={'id_customer':e,'customer_name':customer_name}
+                    payload={'id_customer':e,'customer_name':customer_name,'method':'update'}
                     self.call_to_biostar2(**payload)
 
-
             elif request.method == 'POST':
-                print(request.POST.get('url_name'))
-                if request.POST.get('url_name'):
-                    if 'customers_customer_add' in request.POST.get('url_name'):
-                        print("YYYYESS")
-                # /admin/customers/customer/add/
-                #<QueryDict: {'csrfmiddlewaretoken': ['JGuf8KOFRr0GuifcnWawUAM6t7djm5s5hF7qizzUSQAwQ1m3j5xmJQCVjHaYNZcQ'], 'name': ['newnew'], '_save': ['Save']}>
-                #<QueryDict: {'csrfmiddlewaretoken': ['2HDTnIV3dJYmL9dG5BjDBhvl8mmDmPn5AGg4xxGie8yc7Skx1KGtqxlaYWjiNJ7Q'], 'action': ['delete_selected'], 'select_across': ['0'], 'index': ['0'], '_selected_action': ['11', '10', '9', '8', '7']}>
+                if request.path:
+                    if 'customers/customer/add' in request.path: #add new user
+                        payload={'id_customer':0,'customer_name':request.POST.get('name'),'method':'add'}
+                        self.call_to_biostar2(**payload)
+
                 print(request.content_params)
-                print(request.POST)
+                print(request.POST.get('PATH_INFO'))
                 print(request.__dict__)
                 print(request)
                 print(request.POST.get('name'))
-                #http://127.0.0.1:8000/admin/customers/customer/ list
+
+                # also to catch:
+                # http://127.0.0.1:8000/admin/customers/customer/ list
+                # <QueryDict: {'csrfmiddlewaretoken': ['2HDTnIV3dJYmL9dG5BjDBhvl8mmDmPn5AGg4xxGie8yc7Skx1KGtqxlaYWjiNJ7Q'], 'action': ['delete_selected'], 'select_across': ['0'], 'index': ['0'], '_selected_action': ['11', '10', '9', '8', '7']}>
+
         else:
             pass
         return None
@@ -57,7 +59,7 @@ class faces:
         return response
 
     def call_to_biostar2(self,**kwargs):
-        for key in ('id_customer','customer_name'):
+        for key in ('id_customer','customer_name','method'):
             try:
                 setattr(self, key, kwargs[key])
             except:

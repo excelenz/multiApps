@@ -42,9 +42,11 @@ class faces:
                 print(request)
             elif request.method == 'POST':
                 # /admin/customers/customer/add/
+                #<QueryDict: {'csrfmiddlewaretoken': ['2HDTnIV3dJYmL9dG5BjDBhvl8mmDmPn5AGg4xxGie8yc7Skx1KGtqxlaYWjiNJ7Q'], 'action': ['delete_selected'], 'select_across': ['0'], 'index': ['0'], '_selected_action': ['11', '10', '9', '8', '7']}>
                 print(request.content_params)
                 print(request.POST)
                 print(request)
+                print(QueryDict.get('name'))
         else:
             pass
         return None

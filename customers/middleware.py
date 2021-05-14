@@ -2,18 +2,13 @@ from . models import Customer
 from django.http import HttpResponse
 import requests
 
-#http://127.0.0.1:8000/admin/customers/customer/add/ adding new one and getting id data from server
-#http://127.0.0.1:8000/admin/customers/customer/ list
-#http://127.0.0.1:8000/admin/customers/customer/2/change/ getting one
 class faces:
     def __init__(self, get_response):
         self.get_response = get_response
 
-
     def __call__(self, request):
         response = self.get_response(request)
         return response
-
 
     def process_request(self, request):
         try:
@@ -25,28 +20,27 @@ class faces:
 
     def process_view(self,request,view_func,view_args,view_kwargs):
         if request.user.is_authenticated:
-            print("view_args {}" .format(view_args))
             print("view_kwargs {}" .format(view_kwargs))
             if request.method == 'GET':
-                ######
-                # change existing user true
-                # /admin/customers/customer/5/change/
-                e = view_kwargs.get('object_id')
+                e = view_kwargs.get('object_id') #change existing user /admin/customers/customer/5/change/
                 if e:
                     print("user {}" .format(e))
                     customer_name = Customer.objects.get(id_customer=e)
                     print(customer_name)
                     print(self.call_to_biostar2(e))
-                print("request.content_params {}" .format(request.content_params))
-                print(request.GET)
-                print(request)
             elif request.method == 'POST':
+                print(request.POST.get('url_name'))
+                if 'customers_customer_add' in request.POST.get('url_name'):
+                    print("YYYYESS")
                 # /admin/customers/customer/add/
+                #<QueryDict: {'csrfmiddlewaretoken': ['JGuf8KOFRr0GuifcnWawUAM6t7djm5s5hF7qizzUSQAwQ1m3j5xmJQCVjHaYNZcQ'], 'name': ['newnew'], '_save': ['Save']}>
                 #<QueryDict: {'csrfmiddlewaretoken': ['2HDTnIV3dJYmL9dG5BjDBhvl8mmDmPn5AGg4xxGie8yc7Skx1KGtqxlaYWjiNJ7Q'], 'action': ['delete_selected'], 'select_across': ['0'], 'index': ['0'], '_selected_action': ['11', '10', '9', '8', '7']}>
                 print(request.content_params)
                 print(request.POST)
+                #print(request.__dict__)
                 print(request)
-                print(QueryDict.get('name'))
+                print(request.POST.get('name'))
+                #http://127.0.0.1:8000/admin/customers/customer/ list
         else:
             pass
         return None

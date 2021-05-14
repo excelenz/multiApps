@@ -13,7 +13,7 @@ class CustomerAdmin(admin.ModelAdmin):
     def show_biostar2(self, obj): #show_unchangable_data_from_biostar2
         print(obj)
         result = Customer.objects.get(name=obj)
-        return str(random.randrange(100000, 1000000)) + "user_id" + result.id_customer
+        return str(random.randrange(100000, 1000000)) + "user_id" + str(result.id_customer)
     show_biostar2.short_description = "Unchangeable data"
 
 #admin.site.register(Customer)

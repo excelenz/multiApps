@@ -3,18 +3,20 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ContactListComponent } from './contact-list/contact-list.component';
-import { ContactSingleComponent } from './contact-single/contact-single.component';
+import { HttpClientModule } from '@angular/common/http';
+import { AboutComponent } from './about/about.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    ContactListComponent,
-    ContactSingleComponent
+    AboutComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]
